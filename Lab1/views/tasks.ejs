@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title><%=title %></title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+</head>
+<body>
+    <header><%=title %></header>
+    <div class="wrapper">
+        <div class="taskView column2">
+            <% if(tasksVisible) {%>
+                
+                    <% for(var i=0; i<tasks.length;i++) {%>
+                        <div class="task">
+                            <p class="taskName"><%=tasks[i].name %></p>
+                            <p class="taskDesc"><%=tasks[i].description %></p>
+                            <p class="taskDateTime"><%=tasks[i].datetime %></p>
+                        </div>
+                    <%} %>             
+                
+                <% }else {%>
+                        <h3>Задачи отсутствуют</h3>
+                <%} %>
+        </div>
+        <div class="form_insert column1">
+            <form class="c1" action="/insertTask" method="post">
+                <label for="form_task">Название задачи</label><input class="form_taskName" id="form_task" type="text" name="form_taskName" /> </br>
+                <label for="form_task">Описание задачи</label><input class="form_taskDescription" id="form_task" type="text" name="form_taskDescription" /> </br>
+                <label for="form_task">Дата/Время</label><input class="form_taskDateTime" id="form_task" type="datetime-local" name="form_taskDateTime" /> <br>
+                <button type="submit" value="Добавить задачу">Добавить задачу</button>
+            </form>
+
+            <form class="c1" action="/deleteTask" method="post">
+                <label for="form_task">Название задачи</label><input class="form_taskName" id="form_task" type="text" name="form_taskName" /> </br>    
+                <button type="submit" value="Удалить задачу">Удалить задачу</button>
+            </form>
+
+            <form class="c2" action="/updateTask" method="post">
+                <label for="form_task">Название задачи</label><input class="form_taskName" id="form_task" type="text" name="form_taskName" /> </br>
+                <label for="form_task">Описание задачи</label><input class="form_taskDescription" id="form_task" type="text" name="form_taskDescription" /> </br>
+                <label for="form_task">Дата/Время</label><input class="form_taskDateTime" id="form_task" type="datetime-local" name="form_taskDateTime" /> <br>
+                <button type="submit" value="Добавить задачу">Обновить задачу</button>
+            </form>
+
+            <form class="c2" action="/sortTasks" method="post">
+                <input type="checkbox" name="optionName" value="checkName">по названию<Br>
+                <input type="checkbox" name="optionDateTime" value="checkDateTime">по дате<Br>
+                <button type="submit" value="Добавить задачу">Отсортировать</button>
+            </form>
+        </div> 
+    </div>  
+</body>
+<html>
+
+    
