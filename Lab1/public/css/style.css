@@ -1,0 +1,93 @@
+body {
+	margin: 0;
+	padding: 0;
+	background: url(images/fon.jpg) no-repeat;
+	background-size: 100%;
+}
+
+header {
+	height: 50px;
+	background-color: rgb(192, 180, 7);
+	color: white;
+	text-align: center;
+	margin:  0, 0, 0, 0;
+	font-size: 40px;
+}
+
+.wrapper {
+	width: 100%;
+	max-width: 1020px;
+	padding: 0 40px;
+	margin: 0 auto;
+	margin-top: 10px;
+	box-sizing: border-box;
+  }
+
+.task {
+	height: 100px;
+	border: cadetblue 1px solid;
+	margin: 2px;
+}
+
+p.taskName {
+	font-size: large;
+	text-align: left;
+	padding-left: 30px;
+}
+
+p.taskDesc {
+	color: green;
+	text-align: center;
+}
+
+p.taskDateTime {
+	font-size: xx-small;
+	text-align: right;
+	padding-right: 10px;
+}
+
+.column1 {
+	float: right;
+	width: 25%;
+}
+
+
+.column2 {
+	float: left;
+	width: 70%;
+}
+
+input {
+	margin-bottom: 5px;
+}
+
+form {
+	width: 170px;
+	border: cadetblue 1px solid;
+	padding: 10px;
+	border-radius: 5px;
+	margin-bottom: 10px;
+}
+
+button {
+	background-color :rgb(219, 157, 64);
+	color: white;
+	border-radius: 5px;
+	margin-top: 10px;
+	width: 140px;
+	height: 30px;
+	text-align: center;
+}
+
+.form_taskName {
+	width: 165px;
+}
+
+.form_taskDescription {
+	height: 60px;
+	width: 165px;
+}
+
+.form_taskDateTime {
+	width: 165px;
+}
