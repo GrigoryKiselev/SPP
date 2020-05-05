@@ -24,7 +24,10 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.css"
+              "src/styles.css",
+              {
+                "input": "./node_modules/bootstrap/dist/css/bootstrap.css"
+              }
             ],
             "scripts": []
           },
@@ -119,6 +122,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "angular-taskmanager"
+    }
+  },
+  "defaultProject": "angular-taskmanager",
+  "cli": {
+    "analytics": "2b90c617-0668-4b22-a038-1c5b7fb6cfd0"
+  }
 }

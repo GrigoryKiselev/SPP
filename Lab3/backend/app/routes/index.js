@@ -1,23 +1,28 @@
 'use strict';
 
+var authService = require('../services/authService');
+
+var authMiddleware = function(req, res, next) {
+  if (authService.authenticate(req, res)) {
+      authService.getUserId(req, res);
+      console.log(req.headers.user_id);
+      next();
+  }
+};
+
 module.exports = function(app) {
   var controller = require('../controllers/taskController');
   var authController = require('../controllers/authController');
+  
   console.log("index");
-
-  app.route('/:userId/tasks').get(controller.getAllTasks);
-  app.route('/:userId/tasks/sort').get(controller.sortTasks);
-//  app.route('/:userId/tasks/sortByName').get(controller.getSortedByName);
-//  app.route('/:userId/tasks/sortByDeadline').get(controller.getSortedByDeadline);
-//  app.route('/:userId/tasks/getUnfinished').get(controller.getUnfinished);
-//  app.route('/:userId/tasks/:id').get(controller.getTaskById);
-
-  app.route('/:userId/task').post(controller.createTask);
-  app.route('/:userId/task/:id').put(controller.updateTask);
- // app.route('/:userId/task/:id/status/:statusBool').put(controller.changeTaskStatus);
-
-  app.route('/:userId/task/:id').delete(controller.deleteTask);
-
+  
+  app.route('/tasks').get(authMiddleware, controller.getAllTasks);
+  app.route('/tasks/sort').get(authMiddleware, controller.sortTasks);
+  app.route('/tasks/:id').get(authMiddleware, controller.getTaskById);
+  app.route('/task').post(authMiddleware, controller.createTask);
+  app.route('/task/:id').put(authMiddleware,controller.updateTask);
+  app.route('/task/:id').delete(authMiddleware, controller.deleteTask);
   app.route('/login').post(authController.login);
   app.route('/registrate').post(authController.registrate);
 };
+

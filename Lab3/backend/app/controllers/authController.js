@@ -12,6 +12,9 @@ exports.login = async function(req, res){
     const sql = `SELECT * FROM users WHERE \`login\` = '${data.login}' AND password = '${data.password}' LIMIT 1;`;
     let result = await connection.promise().query(sql);
 
+
+    console.log(data);
+    console.log(result[0]);
     if(result[0].length < 1){
         res.status(404).send({
             message: 'User not found.'
@@ -52,6 +55,6 @@ exports.registrate = async function(req, res){
 
 let generationToken = (user) => {
     return jwt.sign({
-        userName: user.userName
-    }, auth.secretKey, {expiresIn: auth.expires});
+        userId: user.id
+    }, auth.secretKey, { algorithm: 'HS256', expiresIn: auth.expires});
 };

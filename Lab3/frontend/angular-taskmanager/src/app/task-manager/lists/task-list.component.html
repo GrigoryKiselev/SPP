@@ -1,0 +1,48 @@
+<div class="wrapper">
+  <div class = "column2">
+    <table class="table table-condensed table-striped table-bordered">
+      <thead>
+        <th>Название</th>
+        <th>Описание</th>
+        <th>Дата</th>
+        <th>Действия</th>
+      </thead>
+      <tbody>
+        <tr *ngFor="let task of tasks">
+          <th class="column-name">{{task.name}}</th>
+          <th class="column-description">{{task.description}}</th>
+          <th class="column-date">{{task.date | date}}</th>
+          <th classs="column-buttons">    
+              <div>
+                <button routerLink="/task/{{task.id}}">Редактировать</button>
+              </div>
+              <div (click)="onDelete(task.id)">
+                <button type="button" >Удалить</button>
+            </div>
+          </th>
+        </tr>
+          
+      </tbody>
+    </table>
+  </div>
+  <div class="column1">
+    
+    <form class="form-sort">
+      <h3>Сортировка</h3>
+      <p><select #sort >
+       <option disabled>Критерий сортировки</option>
+       <option value="name">Название</option>
+       <option value="description">Описание</option>
+       <option value="date">Дата</option>
+      </select></p>
+      <button type="button" (click)="sortTasks(sort.value)">Сортировать</button>
+      <button type="button" (click)="getAllTasks()">Сбросить</button>
+    </form>
+
+
+    <form class="form-sort">
+      <h3>Добавление</h3>
+      <button routerLink="/task">Новое задание</button> 
+    </form>
+  </div>
+</div>

@@ -1,0 +1,23 @@
+<div class="wrapper">
+    <h4>Регистрация</h4>
+        <form  #taskForm="ngForm">
+            <div>
+                <label for="login">Логин</label>
+                <input type="text" class="form-control" required [(ngModel)]="user.login" name="login" #login="ngModel"/>
+            </div>
+            <div>
+                <label for="password">Пароль</label>
+                <input type="password" class="form-control" required [(ngModel)]="user.password" name="password" #password="ngModel"/>
+            </div>
+            <div>
+                <label for="repeatPassword">Повторите пароль</label>
+                <input type="password" class="form-control" required [(ngModel)]="user.repeatPassword" name="repeatPassword" #repeatPassword="ngModel"/>
+                  <div class="alert alert-danger" *ngIf="user.repeatPassword !== user.password">repeatPassword and password are not the same</div>
+            </div>
+            <div class="buttons">
+                <button (click)="onRegistrate(user)" type="button">Регистрирация</button>
+                <button  routerLink="/login">Назад</button>
+            </div>
+        <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>
+    </form>
+</div>
