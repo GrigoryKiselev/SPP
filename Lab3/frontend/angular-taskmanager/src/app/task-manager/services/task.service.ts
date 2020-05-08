@@ -21,7 +21,7 @@ export class TaskService {
   }
 
   getSortedTasks(sortType: string): Observable<Array<Task>> {
-    return this.http.get<Array<Task>>(`${this.url}tasks/sort?sortType=${sortType}`);
+    return this.http.get<Array<Task>>(`${this.url}tasks?sortType=${sortType}`);
   }
 
   getTask(taskId: number): Observable<Task> {

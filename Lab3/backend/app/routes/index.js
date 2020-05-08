@@ -17,7 +17,6 @@ module.exports = function(app) {
   console.log("index");
   
   app.route('/tasks').get(authMiddleware, controller.getAllTasks);
-  app.route('/tasks/sort').get(authMiddleware, controller.sortTasks);
   app.route('/tasks/:id').get(authMiddleware, controller.getTaskById);
   app.route('/task').post(authMiddleware, controller.createTask);
   app.route('/task/:id').put(authMiddleware,controller.updateTask);

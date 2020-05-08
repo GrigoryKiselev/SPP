@@ -24,6 +24,7 @@ exports.login = async function(req, res){
 
     let user = result[0][0];
     user.token = generationToken(user);
+    user.password = null;
     res.status(200).send(user);
 };
 
@@ -50,6 +51,7 @@ exports.registrate = async function(req, res){
 
     let user = newUser[0][0];
     user.token = generationToken(user);
+    user.password = null;
     res.status(200).send(user);
 }
 
