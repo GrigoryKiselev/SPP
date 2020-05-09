@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Список задач</title>
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+</head>
+<body>
+    <header>Мои задачи</header>
+        <div class="wrapper">
+            <div class="form_insert column1">
+                <form name="taskForm">
+                    <input type="hidden" name="id" value="0" />
+                    <div class="form-group">
+                        <label for="name">Имя:</label>
+                        <input class="form-control" name="name" />
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Описание:</label>
+                        <input class="form-control" name="description" />
+                    </div>
+                    <div class="panel-body">
+                        <button type="submit" class="btn btn-sm btn-primary">Сохранить</button>
+                        <a id="reset" class="btn btn-sm btn-primary">Сбросить</a>
+                    </div>
+                </form>
+            </div>
+            <div class="taskView column2">
+                <table class="table table-condensed table-striped table-bordered">
+                    <thead><tr><th>Id</th><th>Имя</th><th>Описание</th><th>Действия</th></tr></thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+            
+            <script>
+                function GetTasks() {
+                    $.ajax({
+                        url: "/api/tasks",
+                        type: "GET",
+                        contentType: "application/json",
+                        success: function (tasks) {
+                            var rows = "";
+                            $.each(tasks, function (index, task) {
+                                rows += row(task);
+                            })
+                            $("table tbody").append(rows);
+                        }
+                    });
+                }
+                function GetTask(id) {
+                    $.ajax({
+                        url: "/api/tasks/"+id,
+                        type: "GET",
+                        contentType: "application/json",
+                        success: function (task) {
+                            var form = document.forms["taskForm"];
+                            form.elements["id"].value = task.id;
+                            form.elements["name"].value = task.name;
+                            form.elements["description"].value = task.description;
+                        }
+                    });
+                }
+                function CreateTask(taskName, taskDescription) {
+                    $.ajax({
+                        url: "api/tasks",
+                        contentType: "application/json",
+                        method: "POST",
+                        data: JSON.stringify({
+                            name: taskName,
+                            description: taskDescription
+                        }),
+                        success: function (task) {
+                            reset();
+                            $("table tbody").append(row(task));
+                        }
+                    })
+                }
+                function EditTask(taskId, taskName, taskDescription) {
+                    $.ajax({
+                        url: "api/tasks",
+                        contentType: "application/json",
+                        method: "PUT",
+                        data: JSON.stringify({
+                            id: taskId,
+                            name: taskName,
+                            description: taskDescription
+                        }),
+                        success: function (task) {
+                            reset();
+                            $("tr[data-rowid='" + task.id + "']").replaceWith(row(task));
+                        }
+                    })
+                }
+        
+                function reset() {
+                    var form = document.forms["taskForm"];
+                    form.reset();
+                    form.elements["id"].value = 0;
+                }
+            
+                function DeleteTask(id) {
+                    $.ajax({
+                        url: "api/tasks/"+id,
+                        contentType: "application/json",
+                        method: "DELETE",
+                        success: function (task) {
+                            console.log(task);
+                            $("tr[data-rowid='" + task.id + "']").remove();
+                        }
+                    })
+                }
+                var row = function (task) {
+                    return "<tr data-rowid='" + task.id + "'><td>" + task.id + "</td>" +
+                        "<td>" + task.name + "</td> <td>" + task.description + "</td>" +
+                        "<td><a class='editLink' data-id='" + task.id + "'>Изменить</a> | " +
+                            "<a class='removeLink' data-id='" + task.id + "'>Удалить</a></td></tr>";
+                }
+                $("#reset").click(function (e) {
+        
+                    e.preventDefault();
+                    reset();
+                })
+        
+                $("form").submit(function (e) {
+                    e.preventDefault();
+                    var id = this.elements["id"].value;
+                    var name = this.elements["name"].value;
+                    var description = this.elements["description"].value;
+                    if (id == 0)
+                        CreateTask(name, description);
+                    else
+                        EditTask(id, name, description);
+                });
+        
+                $("body").on("click", ".editLink", function () {
+                    var id = $(this).data("id");
+                    GetTask(id);
+                })
+               
+                $("body").on("click", ".removeLink", function () {
+                    var id = $(this).data("id");
+                    DeleteTask(id);
+                })
+                
+                GetTasks();
+        
+            </script>
+            
+        </div>    
+</body>
+</html>
