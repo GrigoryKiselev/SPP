@@ -3,33 +3,25 @@ const auth = require('../config/auth');
 const mySqlService = require('../config/db');
 
 
-exports.login = async function(req, res){
-    let json = JSON.stringify(req.body);
-    let data = JSON.parse(json);
+exports.login = async function(req, io){
 
     const connection = mySqlService.getDBConnection();
    
-    const sql = `SELECT * FROM users WHERE \`login\` = '${data.login}' AND password = '${data.password}' LIMIT 1;`;
-    let result = await connection.promise().query(sql);
+    let result = await connection.promise().query(`SELECT * FROM users WHERE \`login\` = ? AND password = ? LIMIT 1;`, [req.login, req.password]);
 
-
-    console.log(data);
-    console.log(result[0]);
     if(result[0].length < 1){
-        res.status(404).send({
-            message: 'User not found.'
-        });
+        io.emit("login server", 'User not found.');
         return;
     }
 
     let user = result[0][0];
     user.token = generationToken(user);
     user.password = null;
-    res.status(200).send(user);
+    io.emit("login server", user);
 };
 
-exports.registrate = async function(req, res){
-    let json = JSON.stringify(req.body);
+exports.registrate = async function(req, io){ 
+    let json = JSON.stringify(req);
     let data = JSON.parse(json);
 
     const connection = mySqlService.getDBConnection();
@@ -37,9 +29,7 @@ exports.registrate = async function(req, res){
     let result = await connection.promise().query(sql);
 
     if(result[0].length != 0){
-        res.status(400).send({
-            message: 'Such user already exist.'
-        });
+        io.emit("registrate server", 'Such user already exist.');
         return;
     }
 
@@ -52,7 +42,7 @@ exports.registrate = async function(req, res){
     let user = newUser[0][0];
     user.token = generationToken(user);
     user.password = null;
-    res.status(200).send(user);
+    io.emit("registrate server", user);
 }
 
 let generationToken = (user) => {

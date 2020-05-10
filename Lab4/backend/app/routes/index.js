@@ -2,26 +2,19 @@
 
 var authService = require('../services/authService');
 
-var authMiddleware = function(req, res, next) {
-  if (authService.authenticate(req, res)) {
-      authService.getUserId(req, res);
-      console.log(req.headers.user_id);
-      next();
-  }
-};
 
-module.exports = function(app) {
+
+module.exports = function(app, io) {
   var controller = require('../controllers/taskController');
   var authController = require('../controllers/authController');
-  
-  console.log("index");
-  
-  app.route('/tasks').get(authMiddleware, controller.getAllTasks);
-  app.route('/tasks/:id').get(authMiddleware, controller.getTaskById);
-  app.route('/task').post(authMiddleware, controller.createTask);
-  app.route('/task/:id').put(authMiddleware,controller.updateTask);
-  app.route('/task/:id').delete(authMiddleware, controller.deleteTask);
-  app.route('/login').post(authController.login);
-  app.route('/registrate').post(authController.registrate);
+
+  app.on('getTasks', (jwt, sortType) => {controller.getAllTasks(jwt, sortType, io)});
+  app.on('getTask', (jwt, taskId) => { controller.getTaskById(jwt, taskId, io)});
+  app.on('addTask', (jwt, task) => {controller.createTask(jwt, task, io)});
+  app.on('updateTask', (jwt, task) => { controller.updateTask(jwt, task, io)});
+  app.on('deleteTask', (jwt, taskId) => { controller.deleteTask(jwt, taskId, io)});
+
+  app.on('login', (req) => authController.login(req, io));
+  app.on('registrate', (req) => authController.registrate(req, io));
 };
 

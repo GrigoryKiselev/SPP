@@ -38,7 +38,6 @@ export class LoginComponent implements OnInit {
 
     this.loading = true;
     this.authenticationService.login(user)
-        .pipe(first())
         .subscribe(
             data => {
                 let userId = data.id;

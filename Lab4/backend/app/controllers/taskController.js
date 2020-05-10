@@ -1,21 +1,21 @@
 const mySqlService = require('../config/db');
+var authService = require('../services/authService');
 
 
-exports.getAllTasks = async function(req, res){
-    let user_uniq_id = req.headers.user_id;
+exports.getAllTasks = async function(jwt, sortType, io){
+    let user_uniq_id = authService.getUserId(jwt);
     var tasks;
-    var sortType = null;
+    var sortTypeChecked = null;
     
     const connection = mySqlService.getDBConnection();
-    switch(req.query.sortType){
+    switch(sortType){
         case 'name':
         case 'description':
-        case 'date': sortType = req.query.sortType; break;
+        case 'date': sortTypeChecked = sortType; break;
     }
 
-    if(sortType){
-        tasks = (await connection.promise().query(`SELECT * FROM tasks WHERE user_id = ? ORDER BY \`${sortType}\``, [user_uniq_id])); 
-        //console.log(req.query.sortType);
+    if(sortTypeChecked){
+        tasks = (await connection.promise().query(`SELECT * FROM tasks WHERE user_id = ? ORDER BY \`${sortTypeChecked}\``, [user_uniq_id])); 
     }
     else{
         tasks = (await connection.promise().query("SELECT * FROM tasks WHERE user_id = ?", [user_uniq_id]));
@@ -23,69 +23,59 @@ exports.getAllTasks = async function(req, res){
 
     connection.end();
     
-    console.log(tasks[0]);
-    res.send(tasks[0]);
+    io.emit("getAllTasks server", tasks[0]);
 }
 
-exports.createTask = async function(req, res){
-    let user_uniq_id = req.headers.user_id;
+exports.createTask = async function(jwt, task, io){
+    let user_uniq_id = authService.getUserId(jwt);
 
-    if(!req.body) return res.sendStatus(400);
-
-    let json = JSON.stringify(req.body);
-    let data = JSON.parse(json);     
+    if(!task) return io.emit("addTask server", "error"); 
 
     const connection = mySqlService.getDBConnection();
     const sqlInsert = "INSERT INTO tasks(name, description, date, user_id) VALUES(?, ?, ?, ?)";
-    let result = await connection.promise().query(sqlInsert, [data.name, data.description, data.date, user_uniq_id]);
+    let result = await connection.promise().query(sqlInsert, [task.name, task.description, task.date, user_uniq_id]);
     connection.end();
 
-    console.log(result);
-    res.status(200);
-    res.send({"ok": "OK"});
+    io.emit("createTask server");
 }
 
-exports.updateTask = async function(req, res){
-      
-    if(!req.body) return res.sendStatus(400);
-        
-    let json = JSON.stringify(req.body);
-    let data = JSON.parse(json);  
+exports.updateTask = async function(jwt, task, io){
+    let user_uniq_id = authService.getUserId(jwt);
+
+    if(!task) return io.emit("createTask server", "error");
+    
+    console.log(task);
 
     const connection = mySqlService.getDBConnection();
         
-    const sqlUpdate = "UPDATE tasks SET name = ?, description = ?, date = ? WHERE id = ?";
-    await connection.promise().query(sqlUpdate, [data.name, data.description, data.date, req.params['id']]);
+    const sqlUpdate = "UPDATE tasks SET name = ?, description = ?, date = ? WHERE id = ? AND user_id = ?";
+    await connection.promise().query(sqlUpdate, [task.name, task.description, task.date, task.id, user_uniq_id]);
     connection.end();
 
-    res.status(200);
-    res.send({"ok": "OK"});
+    io.emit("updateTask server");
 }
 
-exports.deleteTask = async function(req, res){
-      
-    let json = JSON.stringify(req.body);
-    let data = JSON.parse(json);  
+exports.deleteTask = async function(jwt, taskId, io){
+    let user_uniq_id = authService.getUserId(jwt);  
 
     const connection = mySqlService.getDBConnection();  
-    const sqlDelete = "DELETE FROM tasks WHERE id = ?"; 
+    const sqlDelete = "DELETE FROM tasks WHERE id = ? AND user_id = ?"; 
     
-    await connection.promise().query(sqlDelete, [req.params['id']]);
+    await connection.promise().query(sqlDelete, [taskId, user_uniq_id]);
     connection.end();
 
-    res.status(200);
-    res.send({"ok": "OK"});
+    io.emit("deleteTask server");
 }
 
-exports.getTaskById = async function(req, res){
-
-    if(!req.body) return res.sendStatus(400);
+exports.getTaskById = async function(jwt, taskId, io){
+    let user_uniq_id = authService.getUserId(jwt);
+    if(!taskId) return io.emit("createTask server", "error");
 
     const connection = mySqlService.getDBConnection();
         
-    const sqlSelect = "SELECT * FROM tasks WHERE id = ?"; 
-    let result = await connection.promise().query(sqlSelect, [req.params['id']]);
+    const sqlSelect = "SELECT * FROM tasks WHERE id = ? AND user_id = ?"; 
+    let result = await connection.promise().query(sqlSelect, [taskId, user_uniq_id]);
     connection.end();
 
-    res.send(result[0][0]);
+    io.emit("getTaskById server", result[0][0])
 }
