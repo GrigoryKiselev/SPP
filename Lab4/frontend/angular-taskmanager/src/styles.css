@@ -1,0 +1,190 @@
+body {
+	margin: 0;
+	padding: 0;
+	background: url(images/fon.jpg) no-repeat;
+	background-size: 100%;
+}
+
+header div{
+    display: inline-block;
+}
+
+.container{
+	width: 50%;
+}
+
+.form-sort{
+	width: 210px;
+	text-align: center;
+}
+
+header {
+	height: 60px;
+	background-color: rgb(192, 180, 7);
+	color: white;
+	text-align: left;
+	margin:  0, 0, 0, 0;
+    font-size: 40px;
+}
+
+header a{
+    color: white;
+    text-decoration: none;
+}
+
+header .nav-buttons a:hover{
+    color: white;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.greeting{
+	float: right;
+	font-size: 20px;
+	margin-top: 20px;
+	margin-right: 100px;
+}
+
+.nav-buttons{
+	float: right;
+	font-size: 20px;
+	margin-top: 20px;
+	margin-right: 30px;
+}
+
+header .header-label a:hover{
+    color: white;
+    text-decoration: none;
+	cursor: default;
+}
+
+header .header-label{
+    margin-left: 800px;
+}
+
+.wrapper {
+	max-width: 1500px;
+	padding: 0 40px;
+	margin-left: 16%;
+	margin-top: 10px;
+	box-sizing: border-box;
+}
+
+.column-name{
+	width: 20%;
+}
+
+.column-description{
+	width: 50%;
+}
+
+.column-date{
+	width: 20%;
+}
+
+.column-buttons{
+	width: 10%;
+}
+
+.task {
+	height: 100px;
+	border: cadetblue 1px solid;
+	margin: 2px;
+}
+
+p.taskName {
+	font-size: large;
+	text-align: left;
+	padding-left: 30px;
+}
+
+p.taskDesc {
+	color: green;
+	text-align: center;
+}
+
+p.taskDateTime {
+	font-size: xx-small;
+	text-align: right;
+	padding-right: 10px;
+}
+
+.column1 {
+	float: right;
+	width: 25%;
+}
+
+
+.column2 {
+	float: left;
+	width: 70%;
+}
+
+input {
+	margin-bottom: 5px;
+}
+
+.buttons{
+	margin-top: 10px;
+}
+
+form {
+	border: cadetblue 1px solid;
+	padding: 10px;
+	border-radius: 5px;
+	margin-bottom: 10px;
+	margin-top: 20px;
+}
+
+button {
+	background-color :rgb(219, 157, 64);
+	color: white;
+	border-radius: 5px;
+	margin-top: 10px;
+	width: 140px;
+	height: 30px;
+	text-align: center;
+}
+
+.form_taskName {
+	width: 165px;
+}
+
+.form_taskDescription {
+	height: 60px;
+	width: 165px;
+}
+
+.form_taskDateTime {
+	width: 165px;
+}
+
+table {
+	font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+	font-size: 14px;
+	max-width: 100%;
+	width: 100%;
+	border-collapse: collapse;
+	text-align: left;
+  }
+  th {
+	font-weight: normal;
+	color: #039;
+	border-bottom: 2px solid #6678b1;
+	padding: 10px 8px;
+  }
+  td {
+	color: #669;
+	padding: 9px 8px;
+	transition: .3s linear;
+}
+
+.editLink:hover{
+	color: red;
+	cursor: pointer;
+}
+
+.removeLink:hover{
+	color: red;
+	cursor: pointer;
+}
