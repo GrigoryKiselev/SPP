@@ -1,0 +1,54 @@
+<div class="wrapper">
+  <div class = "column2">
+    <table class="table table-condensed table-striped table-bordered">
+      <thead>
+        <th>Предмет</th>
+        <th>Задание</th>
+        <th>Дедлайн</th>
+        <th>Оценка</th>
+        <th *ngIf = "userRole == 'teacher' ">Студент</th>
+        <th *ngIf = "userRole == 'teacher' ">Действия</th>
+      </thead>
+      <tbody>
+        <tr *ngFor="let task of tasks">
+          <th >{{task.subject}}</th>
+          <th >{{task.details}}</th>
+          <th >{{task.deadline | date}}</th>
+          <th >{{(task.mark == 0)?"Не оценено":task.mark}}</th>
+          <th *ngIf = "userRole == 'teacher' ">{{task.login}}</th>
+          <th *ngIf = "userRole == 'teacher' " class="column-buttons">    
+              <div>
+                <button routerLink="/task/{{task.id}}">Редактировать</button>
+              </div>
+              <div (click)="onDelete(task.id)">
+                <button type="button" >Удалить</button>
+            </div>
+          </th>
+        </tr>
+          
+      </tbody>
+    </table>
+  </div>
+  <div class="column1">
+    
+    <form class="form-sort">
+      <h3>Сортировка</h3>
+      <p><select #sort >
+       <option disabled>Критерий сортировки</option>
+       <option value="subject">Предмет</option>
+       <option value="details">Описание</option>
+       <option value="deadline">Дедлайн</option>
+       <option value="mark">Оценка</option>
+       <option *ngIf = "userRole == 'teacher' " value="student">Студент</option>
+      </select></p>
+      <button type="button" (click)="sortTasks(sort.value)">Сортировать</button>
+      <button type="button" (click)="getAllTasks()">Сбросить</button>
+    </form>
+
+
+    <form *ngIf = "userRole == 'teacher' " class="form-sort">
+      <h3>Добавление</h3>
+      <button routerLink="/task">Новое задание</button> 
+    </form>
+  </div>
+</div>

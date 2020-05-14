@@ -1,0 +1,30 @@
+<div class="container">
+  <h2 *ngIf = "existed">Редактирование</h2>
+  <h2 *ngIf = "!existed">Добавление</h2>
+    <form (ngSubmit)="onSubmit(null)" #taskForm="ngForm">
+      <div>
+        <label for="subject" id="subjectLabel">Предмет</label>
+        <input type="text" class="form-control" id="subject"  required [(ngModel)]="task.subject" name="subject" #name="ngModel">
+      </div>
+      <div>
+        <label for="deadline" id="deadlineLabel">Дедлайн</label>
+        <input type="date" class="form-control" id="deadline"  required [(ngModel)]="task.deadline" [value]="task.deadline" name="deadline" #ddate="ngModel">
+      </div>
+      <div>
+        <label for="details" id="detailsLabel">Подробности</label>
+        <input type="text" class="form-control" id="details" required [(ngModel)]="task.details" name="details" #name="ngModel">
+      </div>
+      <div>
+        <label for="mark" id="markLabel">Оценка</label>
+        <input type="number" class="form-control" id="mark" required [(ngModel)]="task.mark" name="mark" #name="ngModel">
+      </div>
+      <div *ngIf = "!existed">
+        <label for="student" id="studentLabel">Студент</label>
+        <input type="text" class="form-control" id="student" required [(ngModel)]="task.student" name="student" #name="ngModel">
+      </div>
+      <div >
+        <button (click)="onCancel()" type="button">Назад</button>
+        <button (click)="onSubmit(task)" type="button">Сохранить</button>
+      </div>
+    </form>
+  </div>
