@@ -1,0 +1,18 @@
+<header>
+  <div class = "header-label">
+    <a routerLink="/main">
+      <span>Система электронного обучения</span>
+    </a>
+  </div>
+  <div class = "nav-buttons">
+    <a *ngIf = "currentUser" (click)="logout()">Выйти</a>
+  </div>
+  <div class = "greeting">
+    <p *ngIf = "currentUser"> Вы вошли как {{currentUser.login}}</p>
+  </div>
+  <div class = "role" *ngIf = "currentUser">
+    <p *ngIf = "currentUser.role == 'student'"> Ваша роль: Студент</p>
+    <p *ngIf = "currentUser.role == 'teacher'"> Ваша роль: Учитель</p>
+  </div>
+</header>
+<router-outlet></router-outlet>
