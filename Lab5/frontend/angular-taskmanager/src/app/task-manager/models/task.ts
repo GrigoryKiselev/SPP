@@ -4,5 +4,6 @@ export class Task{
         public name: string,
         public description: string,
         public date: string,
+        public user_id: number
     ){}
 }

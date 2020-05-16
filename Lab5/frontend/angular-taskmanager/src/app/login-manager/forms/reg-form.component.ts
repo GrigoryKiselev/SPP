@@ -34,7 +34,7 @@ export class RegComponent implements OnInit {
     }
 
     onRegistrate(user: regUser) {
-        this.submitted = true;
+       this.submitted = true;
     
         this.loading = true;
         this.authenticationService.registrate(new User(null, user.login, user.password, null))

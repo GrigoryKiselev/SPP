@@ -5,7 +5,8 @@ import { map } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 
 import { User } from '../models/user';
-import { regUser } from '../models/regUser';
+import { Apollo } from "apollo-angular";
+import gql from "graphql-tag";
 
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService {
@@ -17,8 +18,8 @@ export class AuthenticationService {
         'Content-Type':  'application/x-www-form-urlencoded',
     });
 
-    constructor(private http: HttpClient) {
-        this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('currentUser')));
+    constructor(private http: HttpClient, private apollo: Apollo) {
+        this.currentUserSubject = new BehaviorSubject<any>(JSON.parse(localStorage.getItem('currentUser')));
         this.currentUser = this.currentUserSubject.asObservable();
     }
 
@@ -27,23 +28,75 @@ export class AuthenticationService {
     }
 
     login(user: User) {
-        let form = this.init(user);
-        return this.http.post<any>(`${this.url}`, form.toString(), {headers: this.headers})
-            .pipe(map(user => { console.log(user);
-                localStorage.setItem('currentUser', JSON.stringify(user));
-                this.currentUserSubject.next(user);
-                return user;
-            }));
+        return new Observable<User>(observer => {
+            const login = gql`
+            mutation login($login: String!
+                            $password: String!) {
+            login(
+                login: $login
+                password: $password
+                ) {
+                    _id
+                    login
+                    password
+                    token
+                }
+            }
+        `;
+        this.apollo
+            .mutate({
+            mutation: login,
+            variables: {
+                userName: user.login,
+                password: user.password,
+            }
+            })
+            .subscribe((user:any) => {
+                const data = user.data.login;
+                localStorage.setItem('currentUser', JSON.stringify(data));
+                this.currentUserSubject.next(data);
+                observer.next(data);
+            },
+            error => {
+                console.log("there was an error sending the query", error);
+            });
+        });
     }
 
     registrate(user: User) {
-        let form = this.init(user);
-        return this.http.post<any>(`${this.reg}`, form.toString(), {headers: this.headers})
-            .pipe(map(user => {
-                localStorage.setItem('currentUser', JSON.stringify(user));
-                this.currentUserSubject.next(user);
-                return user;
-            }));
+        return new Observable<User>(observer => {
+            const registration = gql`
+            mutation registration($login: String!
+                        $password: String!) {
+            registration(
+                login: $login
+                password: $password
+            ) {
+                    _id
+                    login
+                    password
+                    token
+                }
+            }
+        `;
+        this.apollo
+            .mutate({
+            mutation: registration,
+            variables: {
+                login: user.login,
+                password: user.password,
+            }
+            })
+            .subscribe((user:any) => {
+                const data = user.data.login;
+                localStorage.setItem('currentUser', JSON.stringify(data));
+                this.currentUserSubject.next(data);
+                observer.next(data);
+            },
+            error => {
+                console.log("there was an error sending the query", error);
+            });
+        });
     }
 
     logout() {

@@ -6,7 +6,7 @@ const auth = require('../config/auth');
 
 const resolvers = {
     Query: {
-      Tasks: (_, { user_id }) =>  
+      GetTasks: (_, { user_id }) =>  
         {
             var tasks;
             var sortType = null;
@@ -29,7 +29,7 @@ const resolvers = {
             //console.log(tasks[0]);
             return tasks[0];
         },
-      Task: (_, { id }) =>{
+      GetTask: (_, { id }) =>{
         const connection = mySqlService.getDBConnection();
         
         const sqlSelect = "SELECT * FROM tasks WHERE id = ?"; 
@@ -65,8 +65,6 @@ const resolvers = {
         const sql = `SELECT * FROM users WHERE \`login\` = '${args.login}' AND password = '${args.password}' LIMIT 1;`;
         let result = await connection.promise().query(sql);
 
-        //console.log(data);
-        //console.log(result[0]);
         if(result[0].length < 1){
             return "User not found.";
         }
@@ -77,6 +75,33 @@ const resolvers = {
         res.status(200).send(user);
       }, 
     },
+    deleteTask: (root, args) => { 
+        const connection = mySqlService.getDBConnection();  
+        const sqlDelete = "DELETE FROM tasks WHERE id = ?"; 
+    
+        let task = await connection.promise().query(sqlDelete, args.id);
+        connection.end();
+        return;
+    },
+
+    updateTask: (root, args) => {
+        const connection = mySqlService.getDBConnection();
+        
+        const sqlUpdate = "UPDATE tasks SET name = ?, description = ?, date = ? WHERE id = ?";
+        let task = await connection.promise().query(sqlUpdate, [args.name, args.description, args.date, args.id]);
+        connection.end();
+
+        return task;
+    },
+
+    addTask: (root, args) => {
+        const connection = mySqlService.getDBConnection();
+        const sqlInsert = "INSERT INTO tasks(name, description, date, user_id) VALUES(?, ?, ?, ?)";
+        let result = await connection.promise().query(sqlInsert, [args.name, args.description, args.date, args.id]);
+        connection.end();
+
+        return result;
+    }
   };
 
   let generationToken = (user) => {

@@ -14,6 +14,7 @@ import { AuthenticationService } from './login-manager/services/authentication.s
 import { ErrorInterceptor } from './helpers/error.interceptor';
 import { JwtInterceptor } from './helpers/jwt.interceptor';
 import { RegComponent } from './login-manager/forms/reg-form.component';
+import { GraphQLModule } from "./graphql.module";
 
 @NgModule({
   declarations: [
@@ -21,14 +22,15 @@ import { RegComponent } from './login-manager/forms/reg-form.component';
     TaskListComponent,
     TaskFormComponent,
     LoginComponent,
-    RegComponent
+    RegComponent,
   ],
   imports: [
     BrowserModule,
     FormsModule,
-    NgbModule.forRoot(),
+    NgbModule,
     HttpClientModule,
     AppRoutingModule,
+    GraphQLModule
   ],
   providers: [
     HttpClient,
