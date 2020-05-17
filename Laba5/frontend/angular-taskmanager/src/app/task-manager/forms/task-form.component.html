@@ -1,0 +1,22 @@
+<div class="container">
+  <h2 *ngIf = "existed">Редактирование</h2>
+  <h2 *ngIf = "!existed">Добавление</h2>
+    <form (ngSubmit)="onSubmit(null)" #taskForm="ngForm">
+      <div>
+        <label for="name" id="nameLabel">Название</label>
+        <input type="text" class="form-control" id="name"  required [(ngModel)]="task.name" name="name" #name="ngModel">
+      </div>
+      <div>
+        <label for="date" id="dateLabel">Дата</label>
+        <input type="date" class="form-control" id="date"  required [(ngModel)]="task.date" [value]="task.date" name="date" #ddate="ngModel">
+      </div>
+      <div>
+        <label for="description" id="descriptionLabel">Описание</label>
+        <input type="text" class="form-control" id="description" required [(ngModel)]="task.description" name="description" #name="ngModel">
+      </div>
+      <div >
+        <button (click)="onCancel()" type="button">Назад</button>
+        <button (click)="onSubmit(task)" type="button">Сохранить</button>
+      </div>
+    </form>
+  </div>

@@ -1,0 +1,17 @@
+<div class="wrapper">
+    <h4>Авторизация</h4>
+        <form (ngSubmit)="onSubmit(null)" #taskForm="ngForm"> 
+            <div>
+                <label for="login">Логин</label>
+                <input type="text" class="form-control" id="name" required [(ngModel)]="user.login" name="login" #login="ngModel"/>
+            </div>
+            <div>
+                <label for="password">Пароль</label>
+                <input type="password" class="form-control" id="password" required [(ngModel)]="user.password" name="password" #password="ngModel"/>
+            </div>
+            <div class ="buttons">
+                <button (click)="onSubmit(user)" type="button">Войти</button>
+                <button  routerLink="/registration">Регистрация</button>
+            </div>
+    </form>
+</div>
