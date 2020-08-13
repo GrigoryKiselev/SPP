@@ -43,7 +43,7 @@
     "querystringify": "^2.1.1",
     "randomatic": "^3.1.1",
     "rxjs": "~6.3.3",
-    "serialize-javascript": "^3.0.0",
+    "serialize-javascript": "^3.1.0",
     "set-value": "^3.0.1",
     "socket.io-client": "^2.3.0",
     "stringstream": "^1.0.0",
