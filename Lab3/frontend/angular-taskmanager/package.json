@@ -34,7 +34,7 @@
     "handlebars": "^4.7.3",
     "https-proxy-agent": "^5.0.0",
     "js-yaml": "^3.13.1",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.21",
     "lodash.mergewith": "^4.6.2",
     "mem": "^6.0.1",
     "minimist": "^1.2.5",
